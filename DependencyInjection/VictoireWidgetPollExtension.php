@@ -24,5 +24,9 @@ class VictoireWidgetPollExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $container->setParameter(
+            'victoire_widget_poll.victoire_menu_item', $config['victoire_menu_item']
+        );
     }
 }
