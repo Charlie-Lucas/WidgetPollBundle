@@ -24,6 +24,7 @@ class WidgetPollType extends WidgetType
     {
 
         parent::buildForm($builder, $options);
+        $builder->add('title', null);
         $builder->add('questions', CollectionType::class, [
             'entry_type' => QuestionType::class,
             'allow_add' => true,
