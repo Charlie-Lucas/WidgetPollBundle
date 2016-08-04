@@ -9,3 +9,5 @@ jms_translation:
         victoire_poll_bundle:
             dirs: ["@VictoirePollBundle"]
             output_dir: "@VictoirePollBundle/Resources/translations"
+
+

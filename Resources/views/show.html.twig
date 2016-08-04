@@ -1,6 +1,7 @@
 {% extends 'VictoireCoreBundle:Widget:show.html.twig' %}
 
 {% block content %}
-{{ parent() }}
-{# The parent display the content variable, you can do your custom display here #}
+<h2>widget poll</h2>
+    {{ form(participationForm) }}
+    {# The parent display the content variable, you can do your custom display here #}
 {% endblock content %}

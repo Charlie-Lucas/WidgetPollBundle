@@ -3,8 +3,11 @@
 namespace Victoire\Widget\PollBundle\Resolver;
 
 
-use Victoire\Bundle\WidgetBundle\Entity\Widget;
+use Symfony\Component\Form\FormFactory;
+use Victoire\Bundle\WidgetBundle\Model\Widget;
 use Victoire\Bundle\WidgetBundle\Resolver\BaseWidgetContentResolver;
+use Victoire\Widget\PollBundle\Entity\WidgetPoll;
+use Victoire\Widget\PollBundle\Form\Answer\ParticipationType;
 
 /**
  * CRUD operations on WidgetPoll Widget
@@ -31,6 +34,13 @@ use Victoire\Bundle\WidgetBundle\Resolver\BaseWidgetContentResolver;
  */
 class WidgetPollContentResolver extends BaseWidgetContentResolver
 {
+    private $formFactory;
+
+    public function __construct(FormFactory $factory)
+    {
+        $this->formFactory = $factory;
+    }
+
     /**
      * Get the static content of the widget
      *
@@ -39,7 +49,18 @@ class WidgetPollContentResolver extends BaseWidgetContentResolver
      */
     public function getWidgetStaticContent(Widget $widget)
     {
-        return parent::getWidgetStaticContent($widget);
+        $parameters = parent::getWidgetStaticContent($widget);
+        if($widget instanceof WidgetPoll)
+        {
+            $form = $this->formFactory->create(
+                ParticipationType::class, null, [
+                    'questions' => $widget->getQuestions()
+                ]
+            );
+            $parameters['participationForm'] = $form->createView();
+ //           count($form->get('answers'));
+        }
+        return $parameters;
     }
 
     /**

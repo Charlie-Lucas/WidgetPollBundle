@@ -2,12 +2,21 @@
 
 namespace Victoire\Widget\PollBundle\Form;
 
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Victoire\Bundle\CoreBundle\Form\WidgetType;
+use Victoire\Widget\PollBundle\DependencyInjection\Chain\PollQuestionChain;
+use Victoire\Widget\PollBundle\Listener\PollQuestionListener;
 
 class WidgetPollType extends WidgetType
 {
+    private $pollQuestionChain;
+
+    public function __construct(PollQuestionChain $pollQuestionChain)
+    {
+        $this->pollQuestionChain = $pollQuestionChain;
+    }
     /**
      * {@inheritdoc}
      */
@@ -15,7 +24,15 @@ class WidgetPollType extends WidgetType
     {
 
         parent::buildForm($builder, $options);
-
+        $builder->add('questions', CollectionType::class, [
+            'entry_type' => QuestionType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'by_reference' => false,
+            'vic_widget_add_btn' => null
+        ]);
+        $listener = new PollQuestionListener($this->pollQuestionChain);
+        $builder->addEventSubscriber($listener);
     }
 
 
